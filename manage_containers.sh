@@ -1,5 +1,28 @@
 #!/bin/bash
 
+function display_usage(){
+    echo "Usage: $0 <option>"
+    echo "Try '$0 --help' for more information."
+}
+
+# display usage instructions
+function display_help(){
+    echo "Usage: $0 <option>"
+    echo "- start: Start the service."
+    echo "- stop: Stop the service."
+    echo "- check: Check the service status."
+    echo "- --help: Display this help message."
+}
+# check if no arguments were provided and display usage
+if [[ -z "$1" ]]; then
+    display_usage
+    exit 0
+# check if the first argument is "--help" and display detailed help
+elif [[ "$1" == "--help" ]]; then
+    display_help
+    exit 0
+fi
+
 # Function to start Node-RED
 start_node_red() {
     echo "Starting Node-RED container..."
@@ -32,7 +55,7 @@ stop_containers() {
     echo "Grafana container stopped."
 }
 
-# Main script starts here
+# Main script, handling script arguments to start, stop or check services
 case "$1" in
     start)
         start_node_red
@@ -45,6 +68,8 @@ case "$1" in
         check_containers
         ;;
     *)
-        echo "Usage: $0 {start|stop|check}"
+	# Handles any unspecified arguments by showing the usage message
+        echo "Invalid command or no command provided"
+	display_usage
         exit 1
 esac
